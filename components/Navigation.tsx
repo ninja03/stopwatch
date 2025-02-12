@@ -1,4 +1,5 @@
 import { IS_BROWSER } from "$fresh/runtime.ts";
+import NavLink from "./NavLink.tsx";
 
 export default function Navigation() {
   return (
@@ -6,29 +7,14 @@ export default function Navigation() {
       <div class="max-w-5xl mx-auto px-4 w-full">
         <div class="flex items-center justify-between h-20">
           <div class="flex items-center text-xl">
-            <a href="/" class="text-gray-100 font-bold text-2xl lg:text-3xl">
-              ストップウォッチ
-            </a>
+            <NavLink href="/">
+              <span class="text-gray-100 font-bold text-2xl lg:text-3xl">ストップウオッチ</span>
+            </NavLink>
           </div>
           <div class="flex space-x-6 lg:space-x-8">
-            <a
-              href="/"
-              class="text-gray-300 hover:text-white px-3 py-2 rounded-md transition-colors duration-200"
-            >
-              ホーム
-            </a>
-            <a
-              href="/about"
-              class="text-gray-300 hover:text-white px-3 py-2 rounded-md transition-colors duration-200"
-            >
-              特徴
-            </a>
-            <a
-              href="/terms-of-service"
-              class="text-gray-300 hover:text-white px-3 py-2 rounded-md transition-colors duration-200"
-            >
-              利用規約
-            </a>
+            <NavLink href="/">ホーム</NavLink>
+            <NavLink href="/about">特徴</NavLink>
+            <NavLink href="/terms-of-service">利用規約</NavLink>
           </div>
         </div>
       </div>

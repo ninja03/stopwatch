@@ -1,9 +1,12 @@
-import Navigation from "../components/Navigation.tsx";
-import FeatureCard from "../components/FeatureCard.tsx";
 import Layout from "../components/Layout.tsx";
 import FeatureList from "../components/FeatureList.tsx";
 
-const features = [
+interface Feature {
+  title: string;
+  description: string;
+}
+
+const features: Feature[] = [
   {
     title: "シンプルで使いやすい",
     description: "直感的なインターフェースで、誰でも簡単に使えるストップウォッチです. 必要な機能だけを搭載し、余計な機能は省いています."
@@ -30,15 +33,15 @@ const features = [
   }
 ];
 
-export default function About() {
+export default function AboutPage() {
   return (
     <Layout>
-      <div class="py-16">
-        <h1 class="text-5xl lg:text-6xl font-bold text-center mb-12 text-white">
+      <section className="py-16">
+        <h1 className="text-5xl lg:text-6xl font-bold text-center mb-12 text-white">
           ストップウォッチの特徴
         </h1>
         <FeatureList features={features} />
-      </div>
+      </section>
     </Layout>
   );
 }

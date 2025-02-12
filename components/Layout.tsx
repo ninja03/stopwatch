@@ -1,5 +1,6 @@
 import { ComponentChildren } from "preact";
 import Navigation from "./Navigation.tsx";
+import Footer from "./Footer.tsx";
 
 interface LayoutProps {
   children: ComponentChildren;
@@ -10,9 +11,7 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-screen bg-gray-900 font-sans text-gray-100 flex flex-col">
       <Navigation />
       <main className="flex-grow max-w-5xl mx-auto w-full px-4">{children}</main>
-      <footer className="p-4 text-center text-sm opacity-75">
-        © ストップウオッチくん
-      </footer>
+      <Footer />
     </div>
   );
 }
