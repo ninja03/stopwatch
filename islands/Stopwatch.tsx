@@ -140,7 +140,26 @@ export default function Stopwatch() {
       renderer.dispose();
     };
   }, []);
-
+  
+  // マウスのスクロールホイールによる拡大縮小操作
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      if (cameraRef.current) {
+        const zoomSpeed = 0.001;
+        cameraRef.current.zoom -= event.deltaY * zoomSpeed;
+        cameraRef.current.zoom = Math.max(0.5, Math.min(cameraRef.current.zoom, 5));
+        cameraRef.current.updateProjectionMatrix();
+      }
+    };
+    canvas.addEventListener("wheel", handleWheel);
+    return () => {
+      canvas.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+  
   // timeが変更されたときにテクスチャを更新
   useEffect(() => {
     updateClockTexture();
