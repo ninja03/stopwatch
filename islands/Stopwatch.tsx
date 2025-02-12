@@ -160,6 +160,46 @@ export default function Stopwatch() {
     };
   }, []);
   
+  // マウスのドラッグによる時計回転
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    let isDragging = false;
+    let previousMouseX = 0;
+    let previousMouseY = 0;
+    const rotationSpeed = 0.005;
+    const handleMouseDown = (e: MouseEvent) => {
+      if (e.button === 0) {
+        isDragging = true;
+        previousMouseX = e.clientX;
+        previousMouseY = e.clientY;
+      }
+    };
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging && clockRef.current) {
+        const deltaX = e.clientX - previousMouseX;
+        const deltaY = e.clientY - previousMouseY;
+        previousMouseX = e.clientX;
+        previousMouseY = e.clientY;
+        clockRef.current.rotation.y -= deltaX * rotationSpeed;
+        clockRef.current.rotation.x -= deltaY * rotationSpeed;
+      }
+    };
+    const handleMouseUp = () => {
+      isDragging = false;
+    };
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseup", handleMouseUp);
+    canvas.addEventListener("mouseleave", handleMouseUp);
+    return () => {
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("mouseleave", handleMouseUp);
+    };
+  }, []);
+
   // timeが変更されたときにテクスチャを更新
   useEffect(() => {
     updateClockTexture();
@@ -243,9 +283,7 @@ export default function Stopwatch() {
     const milliseconds = Math.floor((time % 1000) / 10);
 
     // 数字を描画
-    const timeStr = `${formatNumber(hours, 2)}:${formatNumber(minutes, 2)}:${
-      formatNumber(seconds, 2)
-    }.${formatNumber(milliseconds, 2)}`;
+    const timeStr = `${formatNumber(hours, 2)}:${formatNumber(minutes, 2)}:${formatNumber(seconds, 2)}.${formatNumber(milliseconds, 2)}`;
 
     let xPos = 120;
     const spacing = 140;
@@ -272,11 +310,7 @@ export default function Stopwatch() {
       <div class="space-x-4">
         <button
           onClick={() => setIsRunning(!isRunning)}
-          class={`w-16 h-16 rounded-full font-bold text-white shadow-lg transform transition-all duration-200 ${
-            isRunning
-              ? "bg-red-600 hover:bg-red-700 active:scale-95"
-              : "bg-green-600 hover:bg-green-700 active:scale-95"
-          }`}
+          class={`w-16 h-16 rounded-full font-bold text-white shadow-lg transform transition-all duration-200 ${isRunning ? "bg-red-600 hover:bg-red-700 active:scale-95" : "bg-green-600 hover:bg-green-700 active:scale-95"}`}
         >
           {isRunning ? "停止" : "開始"}
         </button>
@@ -316,9 +350,7 @@ const formatTime = (time: number) => {
   const seconds = Math.floor((time % 60000) / 1000);
   const milliseconds = Math.floor((time % 1000) / 10);
 
-  return `${formatNumber(hours, 2)}:${formatNumber(minutes, 2)}:${
-    formatNumber(seconds, 2)
-  }.${formatNumber(milliseconds, 2)}`;
+  return `${formatNumber(hours, 2)}:${formatNumber(minutes, 2)}:${formatNumber(seconds, 2)}.${formatNumber(milliseconds, 2)}`;
 };
 
 const formatNumber = (num: number, digits: number) => {
